@@ -1,14 +1,16 @@
 package com.qa.APIhandlers;
 
-import com.jayway.jsonpath.JsonPathException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 public class ResponseHandler {
 
@@ -19,16 +21,13 @@ public class ResponseHandler {
     }
 
     //This method gets all the response headers for further assertions.
-    public HashMap<String, String> getresponseheaders(CloseableHttpResponse response)
+    public  Map<Object, Object> getresponseheaders(CloseableHttpResponse response)
     {
 
-        HashMap<String,String> headermap=new HashMap<String,String>();
         Header[] allheaders=response.getAllHeaders();
-       for(Header header:allheaders)
-       {
-           headermap.put(header.getName(),header.getValue());
-       }
-       return headermap;
+        Map<Object,Object> headermap1=Arrays.asList(allheaders).stream().collect(Collectors.toMap(h -> h.getName(),h -> h.getValue()));
+        headermap1.entrySet().stream().forEach(k-> System.out.println(k));
+        return headermap1;
     }
 
     //Converts a CloseableHttpresponse into JSONObject.
@@ -44,4 +43,6 @@ public class ResponseHandler {
         JSONArray jarray=response.getJSONArray(key);
         return jarray;
     }
+    
+   
 }

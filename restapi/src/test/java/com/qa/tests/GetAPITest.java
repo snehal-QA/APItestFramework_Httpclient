@@ -50,9 +50,8 @@ public class GetAPITest extends Base {
 		Assert.assertEquals((responsehandler.getjsonarray(responsejson,"data").length()),6,"totaldata");
 
 		//Get header data for assertion
-		HashMap<String,String> headermap=responsehandler.getresponseheaders(response);
-		System.out.println(headermap.get("Server"));
-		Assert.assertEquals(headermap.get("Server"),"cloudflare","Server name macthes as expected");
+		System.out.println(responsehandler.getresponseheaders(response).get("Server"));
+		Assert.assertEquals(responsehandler.getresponseheaders(response).get("Server"),"cloudflare","Server name macthes as expected");
 	}
 	
 

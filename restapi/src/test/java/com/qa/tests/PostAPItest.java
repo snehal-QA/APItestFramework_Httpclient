@@ -21,10 +21,13 @@ public class PostAPItest {
         base=new Base();
         apimethods=new APImethods();
         responsehandler=new ResponseHandler();
+        
         String url=base.prop.getProperty("url")+base.prop.getProperty("resource");
 
         CloseableHttpResponse response=apimethods.postmethod(url);
-
+        
+        System.out.println("From POST ***********************________________****************");
+        System.out.println(responsehandler.getresponseheaders(response).get("Report-To")); 
         Assert.assertEquals(response.getStatusLine().getStatusCode(),201,"Status code 201 is returned");
     }
 }

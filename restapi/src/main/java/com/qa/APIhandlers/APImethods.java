@@ -1,23 +1,20 @@
 package com.qa.APIhandlers;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.data.Userpayload;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 public class APImethods {
+	public Userpayload userpayload;
 
 	//GET Method
 	public CloseableHttpResponse get(String url) throws ClientProtocolException, IOException, URISyntaxException {
@@ -57,6 +54,28 @@ public class APImethods {
 
 		//Hitting the post call and getting response in CloseableHttpResponse object
 		CloseableHttpResponse response=httpClient.execute(httppost);
+		return response;
+	}
+
+	//PUT method
+	public CloseableHttpResponse putmethod(String url) throws IOException {
+		userpayload=new Userpayload();
+		CloseableHttpClient httpClient=HttpClients.createDefault();
+		HttpPut httpput=new HttpPut(url);
+        userpayload.setJob("HR");
+        userpayload.setName("morpheus-modified");
+
+        //Convert javaobject to json string
+		ObjectMapper mapper=new ObjectMapper();
+		String payloadstring=mapper.writeValueAsString(userpayload);
+
+		//Formulate httpput request
+		StringEntity entity= new StringEntity(payloadstring);
+		httpput.setEntity(entity);
+		httpput.addHeader("Content-Type","application/json");
+
+		//Execute httpput
+		CloseableHttpResponse response= httpClient.execute(httpput);
 		return response;
 	}
 }
